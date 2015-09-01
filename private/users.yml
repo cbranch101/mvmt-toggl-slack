@@ -1,0 +1,12 @@
+user_admin:
+  email: admin@test.com
+  username: admin
+  password: supersecret
+user_test:
+  email: test@test.com
+  username: test
+  password: testtest
+user_super_admin:
+  email: labs@movementstrategy.com
+  username: super_admin
+  password: movement456

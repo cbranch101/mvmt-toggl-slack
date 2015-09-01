@@ -1,0 +1,23 @@
+<template name="trackedUsers">
+    <div class="ui middle aligned animated divided list">
+	    {{#each tracked_users}}
+		    <div class="item">
+			    <div class="right floated content">
+				    <div class="ui button edit-user">
+					    Edit
+				    </div>
+				    <div class="ui button">
+					    Delete
+				    </div>
+			    </div>
+			    <div class="content">
+				    {{name}}
+			    </div>
+		    </div>
+	    {{/each}}
+    </div>
+    <div class="ui button create-new">
+	    Create New
+    </div>
+	    
+</template>
