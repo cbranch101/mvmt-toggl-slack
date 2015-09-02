@@ -22,5 +22,13 @@ natestrauser:animate-css
 dburles:collection-helpers
 meteorhacks:fast-render
 
-semantic:ui-css
 aldeed:autoform
+semantic:ui-css
+fabienb4:autoform-semantic-ui
+meteorhacks:npm
+
+
+npm-container
+http
+momentjs:moment
+percolatestudio:synced-cron

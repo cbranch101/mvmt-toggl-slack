@@ -1,13 +1,14 @@
 <template name="trackedUsers">
-    <div class="ui middle aligned animated divided list">
+    <h1 class="ui header">Users to Notify</h1>
+    <div class="ui animated bulleted list">
 	    {{#each tracked_users}}
 		    <div class="item">
 			    <div class="right floated content">
-				    <div class="ui button edit-user">
-					    Edit
+				    <div class="ui green circular button icon edit-user">
+					    <i class="icon pencil"></i>
 				    </div>
-				    <div class="ui button">
-					    Delete
+				    <div class="ui red circular button icon delete-user">
+					    <i class="icon trash"></i>
 				    </div>
 			    </div>
 			    <div class="content">
@@ -16,8 +17,7 @@
 		    </div>
 	    {{/each}}
     </div>
-    <div class="ui button create-new">
+    <div class="ui button blue create-new">
 	    Create New
     </div>
-	    
 </template>

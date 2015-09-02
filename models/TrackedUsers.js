@@ -30,6 +30,16 @@ TrackedUsers.attachSchema(
   })
 );
 
+Meteor.methods({
+	removeTrackedUser : function(id) {
+		check(id, String);
+		TrackedUsers.remove({_id : id});
+	},
+	removeAllTrackedUsers : function() {
+		TrackedUsers.remove({});
+	}
+});
+
 // Collection2 already does schema checking
 // Add custom permission rules if needed
 if (Meteor.isServer) {

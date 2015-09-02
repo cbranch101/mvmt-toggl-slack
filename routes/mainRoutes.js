@@ -14,3 +14,8 @@ Router.onBeforeAction(function(){
 		this.next();
 	}
 });
+
+Router.configure({
+	layoutTemplate : 'mainLayout',
+});
+
