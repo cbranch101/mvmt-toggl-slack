@@ -23,7 +23,7 @@ togglHandler = {
 		TrackedUsers.find().forEach(function(user){
 			togglData = togglHandler.getTogglDataForToken(user['toggl_access_token']);
 			togglHandler.sendSlackMessageBasedOnTogglData(user['slack_id'], togglData);
-		});		
+		});
 	},
 	sendSlackMessageBasedOnTogglData : function(slackID, togglData) {
 		_.map(this.messageMap, function(messageDetails){
