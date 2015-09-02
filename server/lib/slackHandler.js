@@ -1,6 +1,6 @@
 var Slack = Meteor.npmRequire('slack-node');
-var accessToken = 'xoxp-3561149326-3831847066-7352485654-a6ef44';
-var slackAPI = new Slack(accessToken);
+var slackAPI = new Slack(Meteor.settings.slack_api_token);
+
 slackHandler = {
 	sendMessage : function(slackID, message) {
 		var attachments = [

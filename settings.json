@@ -2,5 +2,6 @@
     "orion-cli": {
         "profile": "default",
         "config": "private/orion-config.json"
-    }
+    },
+    "slack_api_token" : "xoxp-3561149326-3831847066-7352485654-a6ef44"
 }
