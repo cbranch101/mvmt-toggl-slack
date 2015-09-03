@@ -22,3 +22,11 @@ slackHandler = {
 		var response = syncCallAPI('chat.postMessage', options);
 	}
 };
+
+Meteor.methods({
+	sendSlackMessage : function(slackID, message) {
+		check(slackID, String);
+		check(message, String);
+		slackHandler.sendMessage(slackID, message);
+	}
+});
