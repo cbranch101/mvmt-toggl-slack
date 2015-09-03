@@ -68,7 +68,7 @@ togglHandler = {
 				duration = Number(moment().format('X')) + Number(duration);
 			}
 			durationInHours = (duration / 60) / 60;
-			if(durationInHours > 10) {
+			if(durationInHours > 9) {
 				entry['duration_in_hours'] = durationInHours;
 				longRunningEntries.push(entry);
 			}
