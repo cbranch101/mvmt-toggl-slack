@@ -19,4 +19,7 @@ Meteor.methods({
 	stopJobs : function() {
 		SyncedCron.stop();	
 	},
+	getNextScheduledMessage : function() {
+		console.log(SyncedCron.nextScheduledAtDate('send slack messages'));
+	},
 });
