@@ -1,8 +1,12 @@
 var Toggl = Meteor.npmRequire('toggl-api');
 
 togglHandler = {
+	adminUsers : [
+		'clay',
+	],
 	messageMap : [
 		{
+			identifier : "Undertracked",
 			condition : function(togglData) {
 				return togglData['tracked_hours'] < 6;
 			},
@@ -11,6 +15,7 @@ togglHandler = {
 			},
 		},
 		{
+			identifier : "Running Timer",
 			condition : function(togglData) {
 				return _.size(togglData['long_running_entries']) > 0;
 			},
@@ -28,30 +33,64 @@ togglHandler = {
 		},
 	],
 	generateSlackMessagesForTrackedUsers : function() {
+		var allErrors = [];
 		TrackedUsers.find().forEach(function(user){
-			togglData = togglHandler.getTogglDataForToken(user['toggl_access_token']);
-			togglHandler.sendSlackMessageBasedOnTogglData(user['slack_id'], togglData);
+			togglData = togglHandler.getTogglDataForToken(user['toggl_access_token'], user['office']);
+			error = togglHandler.getErrorFromTogglData(togglData, user);
+			if(error !== null) {
+				togglHandler.sendSlackMessageForError(error);
+				allErrors.push(error);
+			}		
+		});
+		this.sendAdminMessage(allErrors);
+	},
+	sendAdminMessage : function(allErrors) {
+		if(allErrors.length > 0) {
+			var message = 'Toggl Errors for today \n';
+			groupedErrors = _.groupBy(allErrors, 'identifier');
+			_.map(groupedErrors, function(currentErrors, identifier){
+				message += identifier + '\n';
+				_.map(currentErrors, function(error){
+					message += "     " + error.user;
+				});
+			});
+			_.map(this.adminUsers, function(slackID){
+				slackHandler.sendMessage(slackID, message);
+			});
+		}
+	},	
+	sendSlackMessageForError : function(error) {
+		_.map(error.messages, function(message){
+			slackHandler.sendMessage(error['user_slack_id'], message);
 		});
 	},
-	sendSlackMessageBasedOnTogglData : function(slackID, togglData) {
+	getErrorFromTogglData : function(togglData, user) {
+		var error = null;
 		_.map(this.messageMap, function(messageDetails){
 			if(messageDetails['condition'](togglData)) {
-				var messages = messageDetails['get_message'](togglData);
-				if(messages.constructor === String) {
-					messages = [messages];
-				}
-				_.map(messages, function(message){
-					slackHandler.sendMessage(slackID, message);
-				});
+				error = {
+					user : user['name'],
+					user_slack_id : user['slack_id'],
+					identifier : messageDetails.identifier,
+					created_time : moment().format('X'),
+					messages : togglHandler.getErrorMessages(messageDetails, togglData),
+				};		
 			}
 		});
+		return error;
 	},
-	getTimeEntriesForToken : function(apiToken) {
+	getErrorMessages : function(messageDetails, togglData) {
+		var messages = messageDetails['get_message'](togglData);
+		if(messages.constructor === String) {
+			messages = [messages];
+		}
+		return messages;
+	},
+	getTimeEntriesForToken : function(apiToken, timezone) {
 		var togglAPI = new Toggl({apiToken : apiToken});
-		var yesterday = moment().subtract(1, 'days').format();
-		var now = moment().format();
 		getTimeEntries = Async.wrap(togglAPI, 'getTimeEntries');
-		var entries = getTimeEntries(yesterday, now);
+		var timeRange = timeHandler.getTimeRange(moment().subtract(1, 'days'), timezone);
+		var entries = getTimeEntries(timeRange.start, timeRange.end);
 		return entries;
 	},
 	getTogglDataFromEntries : function(entries) {
@@ -89,8 +128,8 @@ togglHandler = {
 		togglData['tracked_hours'] = totalInHours;
 		return togglData;
 	},
-	getTogglDataForToken : function(apiToken) {
-		var entries = togglHandler.getTimeEntriesForToken(apiToken);
+	getTogglDataForToken : function(apiToken, timezone) {
+		var entries = togglHandler.getTimeEntriesForToken(apiToken, timezone);
 		return togglHandler.getTogglDataFromEntries(entries);
 	},
 };

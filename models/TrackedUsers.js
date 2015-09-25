@@ -14,6 +14,14 @@ TrackedUsers.attachSchema(
       	type: String,
 	  	label : 'Toggl Access Token',
     },
+    office : {
+	    type : String,
+	    label : 'Office',
+	    allowedValues : [
+		    'NY',
+		    'CO',
+	    ],
+    },
     createdAt: {
 		type: Date,
 		denyUpdate: true,

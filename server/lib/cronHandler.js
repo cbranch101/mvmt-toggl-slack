@@ -8,7 +8,7 @@ Meteor.methods({
 			name: 'send slack messages',
 			schedule: function(parser) {
 				// parser is a later.parse object
-				return parser.text('at 7:00am every Tuesday, Wednesday, Thursday, Friday and Saturday');
+				return parser.text('at 1:00pm every Tuesday, Wednesday, Thursday, Friday and Saturday');
 			},
 			job: function() {
 				togglHandler.generateSlackMessagesForTrackedUsers();
