@@ -7,6 +7,7 @@ Generate slack messages for registered members of your team when they leave a ti
 Configure Settings.json file
 
 ```json
+}
     "slack_api_token" : YOUR_TOKEN
 }
 ```
@@ -15,5 +16,4 @@ Run meteor with Settings.json flag
 
 ```sh
    meteor --settings settings.json
-}
 ```
